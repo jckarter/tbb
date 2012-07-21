@@ -36,6 +36,7 @@
 #elif _WIN32 
 #include "tbb/machine/windows_api.h"
 #endif /* OS specific */
+#include <memory>
 #include <new>
 
 #if !TBB_USE_EXCEPTIONS && _MSC_VER

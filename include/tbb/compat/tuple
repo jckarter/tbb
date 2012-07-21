@@ -505,10 +505,36 @@ inline static typename tuple_element<N,tuple<T0,T1,T2,T3,T4 __TBB_T_PACK > >::ty
 #if TBB_IMPLEMENT_CPP0X
 namespace std {
 using tbb::interface5::tuple;
+using tbb::interface5::get;
+#ifndef _LIBCPP_UTILITY
 using tbb::interface5::tuple_size;
 using tbb::interface5::tuple_element;
-using tbb::interface5::get;
+#endif
 }
+
+#ifdef _LIBCPP_UTILITY
+
+// LLVM libc++ populates the std namespace from an inline namespace versioned by the
+// abi version, so simply using tbb::interface5::tuple_size etc. causes name lookup
+// ambiguities.
+
+namespace std {
+
+template<int N, class T0, class T1, class T2, class T3, class T4 __TBB_CLASS_T_PACK >
+class tuple_element<N, tbb::interface5::tuple<T0, T1, T2, T3, T4 __TBB_T_PACK> > :
+    public tbb::interface5::tuple_element<N, tbb::interface5::tuple<T0, T1, T2, T3, T4 __TBB_T_PACK> >
+{
+};
+
+template<class T0, class T1, class T2, class T3, class T4 __TBB_CLASS_T_PACK >
+class tuple_size<tbb::interface5::tuple<T0, T1, T2, T3, T4 __TBB_T_PACK> > :
+    public tbb::interface5::tuple_size<tbb::interface5::tuple<T0, T1, T2, T3, T4 __TBB_T_PACK> >
+{
+};
+
+}
+#endif
+
 #endif
 
 #undef __TBB_T_PACK

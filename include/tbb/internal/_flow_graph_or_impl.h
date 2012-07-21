@@ -64,10 +64,20 @@ namespace internal {
     template<typename OutputTuple>
     struct or_output_type {
         typedef OutputTuple tuple_types;
-        typedef struct {
+        struct type {
             size_t indx;
             OutputTuple result;
-        } type;
+#ifdef _LIBCPP_TUPLE
+            // The LLVM libc++ that ships with Mac OS X 10.7 has a bug in tuple that disables
+            // the copy assignment operator (LLVM bug #11921).
+
+            type &operator=(type const &x) {
+                indx = x.indx;
+                result = const_cast<OutputTuple&>(x.result);
+                return *this;
+            }
+#endif
+        };
     };
 
     template<typename TupleTypes,int N>

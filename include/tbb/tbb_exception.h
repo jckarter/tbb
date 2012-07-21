@@ -37,6 +37,7 @@
     #pragma warning (disable: 4530)
 #endif
 
+#include <exception>
 #include <stdexcept>
 #include <string> // required to construct std exception classes
 
@@ -354,7 +355,12 @@ public:
 
 private:
     tbb_exception_ptr ( const std::exception_ptr& src ) : my_ptr(src) {}
+
+#if _MSC_VER || !__clang__ && __TBB_GCC_VERSION < 40600
     tbb_exception_ptr ( const captured_exception& src ) : my_ptr(std::copy_exception(src)) {}
+#else
+    tbb_exception_ptr ( const captured_exception& src ) : my_ptr(std::make_exception_ptr(src)) {}
+#endif
 }; // class tbb::internal::tbb_exception_ptr
 
 } // namespace internal

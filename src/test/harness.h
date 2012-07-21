@@ -63,13 +63,15 @@ int TestMain ();
 
 #if __INTEL_COMPILER
 #define __TBB_LAMBDAS_PRESENT ( _TBB_CPP0X && __INTEL_COMPILER > 1100 )
+#elif __clang__
+#define __TBB_LAMBDAS_PRESENT ( _TBB_CPP0X && __has_feature(cxx_lambdas))
 #elif __GNUC__
 #define __TBB_LAMBDAS_PRESENT ( _TBB_CPP0X && __TBB_GCC_VERSION >= 40500 )
 #elif _MSC_VER
 #define __TBB_LAMBDAS_PRESENT ( _MSC_VER>=1600 )
 #endif
 
-#if defined(_MSC_VER) && _MSC_VER < 1400
+#if defined(_MSC_VER) && _MSC_VER < 1400 || __clang__
     #define __TBB_EXCEPTION_TYPE_INFO_BROKEN 1
 #else
     #define __TBB_EXCEPTION_TYPE_INFO_BROKEN 0

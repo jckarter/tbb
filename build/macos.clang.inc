@@ -37,13 +37,13 @@ WARNING_AS_ERROR_KEY = -Werror
 WARNING_KEY = -Wall
 TEST_WARNING_KEY = -Wextra -Wshadow -Wcast-qual -Woverloaded-virtual -Wnon-virtual-dtor
 WARNING_SUPPRESS = -Wno-non-virtual-dtor
-DYLIB_KEY = -dynamiclib
+DYLIB_KEY = -dynamiclib -Wl,-install_name,@rpath/$@
 EXPORT_KEY = -Wl,-exported_symbols_list,
 LIBDL = -ldl
 
 LIBS = -lpthread
 LINK_FLAGS =
-LIB_LINK_FLAGS = -dynamiclib
+LIB_LINK_FLAGS = -dynamiclib -Wl,-install_name,@rpath/$@
 C_FLAGS = $(CPLUS_FLAGS)
 
 ifeq ($(cfg), release)
